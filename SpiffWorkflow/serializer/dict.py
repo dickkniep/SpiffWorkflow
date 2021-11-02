@@ -326,10 +326,12 @@ class DictionarySerializer(Serializer):
     def serialize_script_task(self, spec):
         s_state = self.serialize_task_spec(spec)
         s_state['script'] = spec.script
+        s_state['script_format'] = spec.script_format
         return s_state
 
     def deserialize_script_task(self, wf_spec, s_state):
-        spec = ScriptTask(wf_spec, s_state['name'], s_state['script'])
+        spec = ScriptTask(wf_spec, s_state['name'], s_state['script'],
+                          s_state['script_format'])
         self.deserialize_task_spec(wf_spec, s_state, spec=spec)
         return spec
 

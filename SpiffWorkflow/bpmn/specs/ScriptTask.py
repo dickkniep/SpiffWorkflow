@@ -34,7 +34,7 @@ class ScriptTask(Simple, BpmnSpecMixin):
     Task Spec for a bpmn:scriptTask node.
     """
 
-    def __init__(self, wf_spec, name, script, **kwargs):
+    def __init__(self, wf_spec, name, script, script_format, **kwargs):
         """
         Constructor.
 
@@ -42,6 +42,7 @@ class ScriptTask(Simple, BpmnSpecMixin):
         """
         super(ScriptTask, self).__init__(wf_spec, name, **kwargs)
         self.script = script
+        self.script_format = script_format  # Mime Type of the script.
 
     def _on_complete_hook(self, task):
         if task.workflow._is_busy_with_restore():

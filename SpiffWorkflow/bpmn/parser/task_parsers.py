@@ -278,7 +278,14 @@ class ScriptTaskParser(TaskParser):
 
     def create_task(self):
         script = self.get_script()
+
+        # Technically, script type should be required, if a script is provided.
+        # And it should be in the format of a MimeType.
+        # like text/python
+        script_type = self.get_script_type()
+
         return self.spec_class(self.spec, self.get_task_spec_name(), script,
+                               script_type,
                                lane=self.get_lane(),
                                position=self.process_parser.get_coord(
                                    self.get_id()),
@@ -292,6 +299,11 @@ class ScriptTaskParser(TaskParser):
         """
         return one(self.xpath('.//bpmn:script')).text
 
+    def get_script_type(self):
+        """
+        Gets the script type if available.
+        """
+        return self.node.get('scriptFormat')
 
 class IntermediateCatchEventParser(TaskParser):
     """
