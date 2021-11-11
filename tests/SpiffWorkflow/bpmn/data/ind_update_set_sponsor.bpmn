@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0be39yr" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
+  <bpmn:process id="Process_set_sponsor" isExecutable="false">
+    <bpmn:documentation>Select {{ entity }}</bpmn:documentation>
+    <bpmn:startEvent id="StartEvent_SetSponsor">
+      <bpmn:documentation>Test</bpmn:documentation>
+      <bpmn:outgoing>Flow_1prpebc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:scriptTask id="Activity_Load_PB_Sponsors" name="Load PB Sponsors">
+      <bpmn:incoming>SequenceFlow_1e9wrfy</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1nl4euw</bpmn:outgoing>
+      <bpmn:script>EntityName = ""</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:userTask id="UserTask_SelectEntityFromPB" name="Select Entity From PB" camunda:formKey="HolderNameFromPB">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="isEntity_InSponsors" label="Was the Protocol Holder found?" type="boolean" defaultValue="True">
+            <camunda:properties>
+              <camunda:property id="description" value="If the holder name was not found, indicate here and text entry will be made available." />
+            </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="required" config="True" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:properties>
+          <camunda:property name="display_name" value="&#34;Select &#34; + entity" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1nl4euw</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1srkdoj</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_SetSponsorStart" default="SequenceFlow_1e9wrfy">
+      <bpmn:incoming>Flow_1prpebc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1e9wrfy</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0npxfd6</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_007szxl</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="UserTask_SelectEntityFromLDAP" name="Select Entity From LDAP" camunda:formKey="NameUVA">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="isEntity_InLDAP" label="Was the UVA PI Holder for IND 1 found?" type="boolean" defaultValue="True">
+            <camunda:validation>
+              <camunda:constraint name="required" config="True" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:properties>
+          <camunda:property name="display_name" value="&#34;Select &#34; + entity" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0npxfd6</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1s5o13s</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_02bj3y0</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_EntityInLDAP" name="Entity Found in LDAP?" default="SequenceFlow_04bpxnb">
+      <bpmn:incoming>SequenceFlow_02bj3y0</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_09uc6k5</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_04bpxnb</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_SetSponsorExit">
+      <bpmn:incoming>SequenceFlow_1j6ry4c</bpmn:incoming>
+      <bpmn:incoming>Flow_1l55ais</bpmn:incoming>
+      <bpmn:incoming>Flow_150oi7s</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_107k2sl</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_SponsorInPB" name="Found in PB Sponsor List?" default="SequenceFlow_0cnhiz1">
+      <bpmn:incoming>SequenceFlow_1srkdoj</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0020dj1</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0j1nkm5</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0cnhiz1</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:scriptTask id="ScriptTask_ResetEntityName_2" name="(Re-)Set Entity Name">
+      <bpmn:incoming>SequenceFlow_09uc6k5</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_007szxl</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0j1nkm5</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0g3ggjc</bpmn:outgoing>
+      <bpmn:script>EntityName = ""</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="ScriptTask_ResetEntityName_1" name="Reset Entity Name">
+      <bpmn:incoming>SequenceFlow_0020dj1</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1s5o13s</bpmn:outgoing>
+      <bpmn:script>EntityID = ""</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1e9wrfy" name="Entity Name from PB" sourceRef="ExclusiveGateway_SetSponsorStart" targetRef="Activity_Load_PB_Sponsors" />
+    <bpmn:sequenceFlow id="SequenceFlow_1srkdoj" sourceRef="UserTask_SelectEntityFromPB" targetRef="ExclusiveGateway_SponsorInPB" />
+    <bpmn:sequenceFlow id="SequenceFlow_0npxfd6" name="Entity Name Not from PB and Entity Type is UVA PI" sourceRef="ExclusiveGateway_SetSponsorStart" targetRef="UserTask_SelectEntityFromLDAP">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">not(isEntityNameInPB) and EntityType == "UVaPI"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_007szxl" name="Entity Not from PB and Entity Type is not UVA PI" sourceRef="ExclusiveGateway_SetSponsorStart" targetRef="ScriptTask_ResetEntityName_2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">not(isEntityNameInPB) and EntityType != "UVaPI"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1s5o13s" sourceRef="ScriptTask_ResetEntityName_1" targetRef="UserTask_SelectEntityFromLDAP" />
+    <bpmn:sequenceFlow id="SequenceFlow_02bj3y0" sourceRef="UserTask_SelectEntityFromLDAP" targetRef="ExclusiveGateway_EntityInLDAP" />
+    <bpmn:sequenceFlow id="SequenceFlow_0g3ggjc" sourceRef="ScriptTask_ResetEntityName_2" targetRef="UserTask_SetNameFromText" />
+    <bpmn:sequenceFlow id="SequenceFlow_1j6ry4c" sourceRef="UserTask_SetNameFromText" targetRef="ExclusiveGateway_SetSponsorExit" />
+    <bpmn:sequenceFlow id="SequenceFlow_09uc6k5" name="No, Text Entry Required" sourceRef="ExclusiveGateway_EntityInLDAP" targetRef="ScriptTask_ResetEntityName_2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">not(isEntity_InLDAP)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_04bpxnb" name="Yes" sourceRef="ExclusiveGateway_EntityInLDAP" targetRef="Activity_SetNameFromLDAP" />
+    <bpmn:sequenceFlow id="SequenceFlow_0020dj1" name="No, Entity Type is UVA PI" sourceRef="ExclusiveGateway_SponsorInPB" targetRef="ScriptTask_ResetEntityName_1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">not(isEntity_InSponsors) and EntityType == "UVaPI"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1nl4euw" sourceRef="Activity_Load_PB_Sponsors" targetRef="UserTask_SelectEntityFromPB" />
+    <bpmn:endEvent id="EndEvent_SetSponsor">
+      <bpmn:incoming>SequenceFlow_107k2sl</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_107k2sl" sourceRef="ExclusiveGateway_SetSponsorExit" targetRef="EndEvent_SetSponsor" />
+    <bpmn:sequenceFlow id="Flow_1prpebc" sourceRef="StartEvent_SetSponsor" targetRef="ExclusiveGateway_SetSponsorStart" />
+    <bpmn:sequenceFlow id="Flow_1l55ais" sourceRef="Activity_SetNameFromPB" targetRef="ExclusiveGateway_SetSponsorExit" />
+    <bpmn:sequenceFlow id="Flow_150oi7s" sourceRef="Activity_SetNameFromLDAP" targetRef="ExclusiveGateway_SetSponsorExit" />
+    <bpmn:scriptTask id="Activity_SetNameFromLDAP" name="Get Entity Name from LDAP">
+      <bpmn:incoming>SequenceFlow_04bpxnb</bpmn:incoming>
+      <bpmn:outgoing>Flow_150oi7s</bpmn:outgoing>
+      <bpmn:script>EntityName = "Name from LDAP"</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_SetNameFromPB" name="Get Entity Name From PB">
+      <bpmn:incoming>SequenceFlow_0cnhiz1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1l55ais</bpmn:outgoing>
+      <bpmn:script>EntityName = 'Name from PB'</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0j1nkm5" name="No, EntityType is not UVA PI" sourceRef="ExclusiveGateway_SponsorInPB" targetRef="ScriptTask_ResetEntityName_2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">not(isEntity_InSponsors) and EntityType != "UVaPI"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0cnhiz1" name="Yes" sourceRef="ExclusiveGateway_SponsorInPB" targetRef="Activity_SetNameFromPB" />
+    <bpmn:scriptTask id="UserTask_SetNameFromText" name="Enter Entity Text Name">
+      <bpmn:incoming>SequenceFlow_0g3ggjc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1j6ry4c</bpmn:outgoing>
+      <bpmn:script>EntityName = 'Name from Text'</bpmn:script>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_set_sponsor">
+      <bpmndi:BPMNEdge id="Flow_150oi7s_di" bpmnElement="Flow_150oi7s">
+        <di:waypoint x="1060" y="270" />
+        <di:waypoint x="1160" y="270" />
+        <di:waypoint x="1160" y="362" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l55ais_di" bpmnElement="Flow_1l55ais">
+        <di:waypoint x="1060" y="100" />
+        <di:waypoint x="1160" y="100" />
+        <di:waypoint x="1160" y="362" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1prpebc_di" bpmnElement="Flow_1prpebc">
+        <di:waypoint x="218" y="387" />
+        <di:waypoint x="325" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_107k2sl_di" bpmnElement="SequenceFlow_107k2sl">
+        <di:waypoint x="1185" y="387" />
+        <di:waypoint x="1242" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0cnhiz1_di" bpmnElement="SequenceFlow_0cnhiz1">
+        <di:waypoint x="640" y="155" />
+        <di:waypoint x="640" y="100" />
+        <di:waypoint x="960" y="100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="791" y="82" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0j1nkm5_di" bpmnElement="SequenceFlow_0j1nkm5">
+        <di:waypoint x="665" y="180" />
+        <di:waypoint x="840" y="180" />
+        <di:waypoint x="840" y="347" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="849" y="196" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1nl4euw_di" bpmnElement="SequenceFlow_1nl4euw">
+        <di:waypoint x="350" y="230" />
+        <di:waypoint x="350" y="180" />
+        <di:waypoint x="470" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0020dj1_di" bpmnElement="SequenceFlow_0020dj1">
+        <di:waypoint x="640" y="205" />
+        <di:waypoint x="640" y="280" />
+        <di:waypoint x="570" y="280" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="650" y="216" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_04bpxnb_di" bpmnElement="SequenceFlow_04bpxnb">
+        <di:waypoint x="660" y="362" />
+        <di:waypoint x="660" y="270" />
+        <di:waypoint x="960" y="270" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="671" y="303" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_09uc6k5_di" bpmnElement="SequenceFlow_09uc6k5">
+        <di:waypoint x="685" y="387" />
+        <di:waypoint x="790" y="387" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="695" y="356" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1j6ry4c_di" bpmnElement="SequenceFlow_1j6ry4c">
+        <di:waypoint x="1060" y="387" />
+        <di:waypoint x="1135" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0g3ggjc_di" bpmnElement="SequenceFlow_0g3ggjc">
+        <di:waypoint x="890" y="387" />
+        <di:waypoint x="960" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_02bj3y0_di" bpmnElement="SequenceFlow_02bj3y0">
+        <di:waypoint x="570" y="387" />
+        <di:waypoint x="635" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1s5o13s_di" bpmnElement="SequenceFlow_1s5o13s">
+        <di:waypoint x="520" y="320" />
+        <di:waypoint x="520" y="347" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_007szxl_di" bpmnElement="SequenceFlow_007szxl">
+        <di:waypoint x="350" y="412" />
+        <di:waypoint x="350" y="520" />
+        <di:waypoint x="840" y="520" />
+        <di:waypoint x="840" y="427" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="741" y="447" width="79" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0npxfd6_di" bpmnElement="SequenceFlow_0npxfd6">
+        <di:waypoint x="375" y="387" />
+        <di:waypoint x="470" y="387" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="370" y="393" width="81" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1srkdoj_di" bpmnElement="SequenceFlow_1srkdoj">
+        <di:waypoint x="570" y="180" />
+        <di:waypoint x="615" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1e9wrfy_di" bpmnElement="SequenceFlow_1e9wrfy">
+        <di:waypoint x="350" y="362" />
+        <di:waypoint x="350" y="310" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="360" y="336" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="StartEvent_1mhzkcr_di" bpmnElement="StartEvent_SetSponsor">
+        <dc:Bounds x="182" y="369" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16kljw2_di" bpmnElement="Activity_Load_PB_Sponsors">
+        <dc:Bounds x="300" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0gah1gh_di" bpmnElement="UserTask_SelectEntityFromPB">
+        <dc:Bounds x="470" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0sz0czq_di" bpmnElement="ExclusiveGateway_SetSponsorStart" isMarkerVisible="true">
+        <dc:Bounds x="325" y="362" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_13due9f_di" bpmnElement="UserTask_SelectEntityFromLDAP">
+        <dc:Bounds x="470" y="347" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0xysnya_di" bpmnElement="ExclusiveGateway_EntityInLDAP" isMarkerVisible="true">
+        <dc:Bounds x="635" y="362" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="624" y="422" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1flig76_di" bpmnElement="ExclusiveGateway_SetSponsorExit" isMarkerVisible="true">
+        <dc:Bounds x="1135" y="362" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1pmhlzs_di" bpmnElement="ExclusiveGateway_SponsorInPB" isMarkerVisible="true">
+        <dc:Bounds x="615" y="155" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="670" y="146" width="68" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ScriptTask_0ju5ta5_di" bpmnElement="ScriptTask_ResetEntityName_2">
+        <dc:Bounds x="790" y="347" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ScriptTask_1vkecfc_di" bpmnElement="ScriptTask_ResetEntityName_1">
+        <dc:Bounds x="470" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_10mkh76_di" bpmnElement="EndEvent_SetSponsor">
+        <dc:Bounds x="1242" y="369" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_02dhdt3_di" bpmnElement="Activity_SetNameFromLDAP">
+        <dc:Bounds x="960" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08s8j5i_di" bpmnElement="Activity_SetNameFromPB">
+        <dc:Bounds x="960" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16w9fcu_di" bpmnElement="UserTask_SetNameFromText">
+        <dc:Bounds x="960" y="347" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
